@@ -1,4 +1,4 @@
-const isPrime = (n: number): boolean => {
+export const isPrime = (n: number): boolean => {
   for (let i = 2; i < n - 1; i += 1) {
     if (n % i === 0) {
       return false;
@@ -7,7 +7,7 @@ const isPrime = (n: number): boolean => {
   return true;
 };
 
-const nextPrime = (n: number): number => {
+export const nextPrime = (n: number): number => {
   let result = n + 1;
   while (!isPrime(result)) {
     result += 1;
@@ -15,7 +15,7 @@ const nextPrime = (n: number): number => {
   return result;
 };
 
-const isFactor = (x: number) => (n: number) => n % x === 0;
+export const isFactor = (x: number) => (n: number) => n % x === 0;
 
 const isPrimeFactor = (x: number) => (n: number) => isPrime(x) && isFactor(x)(n);
 
