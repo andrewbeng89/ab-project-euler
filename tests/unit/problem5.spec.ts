@@ -31,6 +31,20 @@ const primeFactors = (n: number): number[] => {
   return result;
 };
 
+const allPrimes = (end: number): number[] => {
+  let prime = 2;
+  let primes = [prime];
+
+  while (prime < end) {
+    prime = nextPrime(prime);
+    if (prime <= end) {
+      primes = [...primes, prime];
+    }
+  }
+
+  return primes;
+};
+
 const nonPrimes = (end: number): number[] => {
   let result: number[] = [];
   for (let i = 4; i < end; i += 1) {
@@ -44,19 +58,25 @@ const nonPrimes = (end: number): number[] => {
 
 const smallestDivisibleProduct = (end: number): number => {
   const base = productOfPrimes(end);
-  let run = true;
 
   const test = nonPrimes(end);
-  let candidate: number = base;
-  let multiplier = 1;
-  while (run) {
-    candidate = multiplier * base;
-    // eslint-disable-next-line no-loop-func
-    const testDivisible = test.map(i => candidate % i === 0);
-    run = testDivisible.some(t => !t);
-    if (run) multiplier += 1;
-  }
-  return candidate;
+  let np: any = test.map(n => primeFactors(n));
+  np = np.map((pf: number[]) => pf.reduce((acc: any, n: number) => ({
+    ...acc,
+    ...(!acc[n] ? { [n]: 1 } : { [n]: acc[n] + 1 }),
+  }), {})).reduce((acc: any, factors: any) => {
+    const keys = Object.keys(factors);
+    const tmp: any = {};
+    keys.forEach((k) => {
+      if ((!acc[k] && factors[k] > 1) || (acc[k] && factors[k] > acc[k])) {
+        tmp[k] = factors[k];
+      }
+    });
+    return { ...acc, ...tmp };
+  }, {});
+  const multiplier = Object.keys(np).reduce((acc, k) => acc * (Number(k) ** (np[k] - 1)), 1);
+
+  return multiplier * base;
 };
 
 describe('Euler 5', () => {
