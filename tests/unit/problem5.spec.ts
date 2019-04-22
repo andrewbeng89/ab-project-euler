@@ -1,11 +1,11 @@
-import { nextPrime, isPrime, primeFactors } from './problem3.spec';
+import { nextPrimeOpt, isPrimeOpt, primeFactors } from './problem3.spec';
 
 const productOfPrimes = (end: number): number => {
   let prime = 2;
   let primes = [prime];
 
   while (prime < end) {
-    prime = nextPrime(prime);
+    prime = nextPrimeOpt(prime, primes);
     if (prime <= end) {
       primes = [...primes, prime];
     }
@@ -19,7 +19,7 @@ const allPrimes = (end: number): number[] => {
   let primes = [prime];
 
   while (prime < end) {
-    prime = nextPrime(prime);
+    prime = nextPrimeOpt(prime, primes);
     if (prime <= end) {
       primes = [...primes, prime];
     }
@@ -30,9 +30,12 @@ const allPrimes = (end: number): number[] => {
 
 const nonPrimes = (end: number): number[] => {
   let result: number[] = [];
+  let primes = [2, 3];
   for (let i = 4; i < end; i += 1) {
-    if (!isPrime(i)) {
+    if (!isPrimeOpt(i, primes)) {
       result = [...result, i];
+    } else {
+      primes = [...primes, i];
     }
   }
 
