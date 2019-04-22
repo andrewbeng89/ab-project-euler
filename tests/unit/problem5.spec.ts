@@ -1,4 +1,4 @@
-import { nextPrime, isPrime } from './problem3.spec';
+import { nextPrime, isPrime, primeFactors } from './problem3.spec';
 
 const productOfPrimes = (end: number): number => {
   let prime = 2;
@@ -12,23 +12,6 @@ const productOfPrimes = (end: number): number => {
   }
 
   return primes.reduce((acc, n) => acc * n, 1);
-};
-
-const primeFactors = (n: number): number[] => {
-  let result: number[] = [];
-
-  let prime = 2;
-  let test = n;
-  while (test !== 1) {
-    if (test % prime === 0) {
-      result = [...result, prime];
-      test /= prime;
-    } else {
-      prime = nextPrime(prime);
-    }
-  }
-
-  return result;
 };
 
 const allPrimes = (end: number): number[] => {

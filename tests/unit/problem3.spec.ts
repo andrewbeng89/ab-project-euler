@@ -17,20 +17,31 @@ export const nextPrime = (n: number): number => {
 
 export const isFactor = (x: number) => (n: number) => n % x === 0;
 
-const isPrimeFactor = (x: number) => (n: number) => isPrime(x) && isFactor(x)(n);
+export const primeFactors = (n: number): number[] => {
+  let result: number[] = [];
 
-const largestPrime = (n: number): number => {
-  let result = 2;
-  for (let prime = 2; prime < n; prime = nextPrime(prime)) {
-    if (isPrimeFactor(prime)(n)) {
-      result = prime;
+  let prime = 2;
+  let test = n;
+  while (test !== 1) {
+    if (test % prime === 0) {
+      result = [...result, prime];
+      test /= prime;
+    } else {
+      prime = nextPrime(prime);
     }
   }
+
   return result;
+};
+
+const largestPrime = (n: number): number => {
+  const pf = primeFactors(n);
+  return Number(pf.pop());
 };
 
 describe('Largest prime factor', () => {
   it('Should ', () => {
     expect(largestPrime(13195)).toBe(29);
+    expect(largestPrime(600851475143)).toBe(6857);
   });
 });
