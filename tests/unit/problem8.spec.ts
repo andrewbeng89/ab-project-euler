@@ -26,7 +26,6 @@ const getNonZeroSequences = ({ string, length }: { string: string, length: numbe
 };
 
 const largestProductInSeries = ({ string, length }: { string: string, length: number }) => {
-  const nonZeroSequences = getNonZeroSequences({ string, length });
   let result = 0;
   for (let i = 0; i < string.length - length; i += 1) {
     const substring = getSubstring({ string, index: i, length });
@@ -39,19 +38,13 @@ const largestProductInSeries = ({ string, length }: { string: string, length: nu
 };
 
 describe('Problem 8', () => {
-  it('Should return a substring from index 0 of length 4 in DIGITS', () => {
-    expect(getSubstring({ string: DIGITS, index: 0, length: 8 })).toBe('73167176');
-  });
-
-  it('Should return 38 as the sum of the first 8 digits', () => {
-    expect(sumDigits(getSubstring({ string: DIGITS, index: 0, length: 8 })))
-      .toBe(38);
-  });
-
   it('Should return 5832 as the largest 4-digit series product', () => {
     expect(largestProductInSeries({ string: DIGITS, length: 4 }))
       .toBe(5832);
   });
 
-  it('Should return 23514624000 as the largest 13-digit series product');
+  it('Should return 23514624000 as the largest 13-digit series product', () => {
+    expect(largestProductInSeries({ string: DIGITS, length: 13 }))
+      .toBe(23514624000);
+  });
 });
