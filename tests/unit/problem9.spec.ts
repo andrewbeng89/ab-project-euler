@@ -66,19 +66,36 @@ const C = [
 ];
 
 const generatePrimitiveTriplets = (
-  triplets: number[][][][] = [[[[3, 4, 5]]]], subIndex: number = 0,
+  triplets: number[][][][] = [[[[3, 4, 5]]]],
 ) => {
-  const nextSubIndex = triplets.length;
-  const currentTriplets = triplets
-    .slice(subIndex)
-    .reduce((acc, m) => ([...acc, ...m]), []);
+  const currentTriplets = triplets[triplets.length - 1];
   const newTriplets = currentTriplets
     .map(t => [A, B, C].map(m => matrixMultiply(t, m)));
-  return { triplets: [...triplets, ...newTriplets], subIndex: nextSubIndex };
+  return {
+    triplets: [...triplets, ...newTriplets],
+    newTriplets,
+  };
 };
 
 const findTripletWithSum = (sum: number) => {
-
+  let result = [3, 4, 5];
+  let mats = [[[[...result]]]];
+  let factor = sum % 12 === 0 ? sum / 12 : 0;
+  while (factor === 0) {
+    mats = generatePrimitiveTriplets(mats)
+      .newTriplets;
+    const triplets = mats.reduce((acc, t) => [...acc, ...t], []);
+    const results = triplets.map(triplet => triplet[0]);
+    result = results.find((res) => {
+      const s = res.reduce((a, n) => (a + n), 0);
+      return sum % s === 0;
+    }) || [];
+    if (result.length) {
+      factor = sum / result.reduce((a, n) => (a + n), 0);
+    }
+  }
+  result = result.map(n => (factor * n));
+  return result;
 };
 
 describe('Problem 9', () => {
@@ -108,7 +125,8 @@ describe('Problem 9', () => {
     });
 
   it('Should return the next set of primitive triplets', () => {
-    const { triplets, subIndex } = generatePrimitiveTriplets();
+    const { triplets } = generatePrimitiveTriplets();
     expect(triplets[1]).toEqual([[[5, 12, 13]], [[21, 20, 29]], [[15, 8, 17]]]);
+    console.log(findTripletWithSum(1000));
   });
 });
